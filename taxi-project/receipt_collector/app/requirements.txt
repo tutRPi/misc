@@ -1,0 +1,5 @@
+fastapi==0.8.0
+uvicorn[standard]==0.18.3
+sqlalchemy==1.4.40
+alembic==1.8.1
+tenacity==8.0.1

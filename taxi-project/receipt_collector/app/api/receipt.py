@@ -1,4 +1,4 @@
-import os
+import logging
 
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
@@ -12,6 +12,7 @@ from app.schemas.receipt import ReceiptForwardMessage
 
 router = APIRouter()
 
+logger = logging.getLogger("api")
 
 def get_db():
     db = SessionLocal()
@@ -25,7 +26,9 @@ def get_db():
 async def create_receipt(receipt_in: ReceiptCreate, db: Session = Depends(get_db)):
     receipt = crud.receipt.create(db=db, obj_in=receipt_in)
 
+    logger.info("Receipt saved, send now to queue")
+
     receipt_forward_message = ReceiptForwardMessage.from_orm(receipt)
-    publish("test11", jsonable_encoder(receipt_forward_message))
+    publish("Receipt", jsonable_encoder(receipt_forward_message))
 
     return receipt

@@ -1,10 +1,14 @@
+import os
+
 from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 from app import crud
 from app.db.session import SessionLocal
-from app.schemas import ReceiptCreate
+from app.rabbitmq.producer import publish
+from app.schemas import ReceiptCreate, Receipt
+from app.schemas.receipt import ReceiptForwardMessage
 
 router = APIRouter()
 
@@ -17,9 +21,11 @@ def get_db():
         db.close()
 
 
-@router.post("/receipt", status_code=201)
+@router.post("/receipt", status_code=201, response_model=Receipt)
 async def create_receipt(receipt_in: ReceiptCreate, db: Session = Depends(get_db)):
-    print(jsonable_encoder(receipt_in))
     receipt = crud.receipt.create(db=db, obj_in=receipt_in)
+
+    receipt_forward_message = ReceiptForwardMessage.from_orm(receipt)
+    publish("test11", jsonable_encoder(receipt_forward_message))
 
     return receipt

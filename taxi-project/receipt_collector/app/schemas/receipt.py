@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 
 from app.constants import ZONE_LOOKUP
+from .location import Location
 
 
 class RateCodeID(int, Enum):
@@ -24,16 +25,12 @@ class PaymentType(int, Enum):
     VOIDED_TRIP = 6
 
 
-class ReceiptCreate(BaseModel):
-    VendorID: int = Field(alias="vendor_id")
-    tpep_pickup_datetime: Union[int, str]
-    tpep_dropoff_datetime: Union[int, str]
+class ReceiptBase(BaseModel):
+    tpep_pickup_datetime: Union[int, str, datetime]
+    tpep_dropoff_datetime: Union[int, str, datetime]
     passenger_count: int
     trip_distance: float
-    PULocationID: int = Field(alias="pickup_location_id")  # Pickup zone
-    DOLocationID: int = Field(alias="dropoff_location_id")  # Dropoff zone
     RatecodeID: RateCodeID = Field(alias="rate_code_id")
-    store_and_fwd_flag: str = Field(exclude=True)
     payment_type: PaymentType
     fare_amount: float
     extra: float
@@ -47,6 +44,14 @@ class ReceiptCreate(BaseModel):
 
     class Config:
         allow_population_by_field_name = True
+
+
+class ReceiptCreate(ReceiptBase):
+    VendorID: int = Field(alias="vendor_id")
+    PULocationID: int = Field(alias="pickup_location_id")  # Pickup zone
+    DOLocationID: int = Field(alias="dropoff_location_id")  # Dropoff zone
+    store_and_fwd_flag: Union[str, None] = Field(exclude=True)
+
 
     @validator('VendorID')
     def validate_vendor_id(cls, v):
@@ -105,3 +110,11 @@ class ReceiptInDBBase(ReceiptCreate):
 
 class Receipt(ReceiptInDBBase):
     pass
+
+
+class ReceiptForwardMessage(ReceiptBase):
+    pickup_location: Location
+    dropoff_location: Location
+
+    class Config:
+        orm_mode = True

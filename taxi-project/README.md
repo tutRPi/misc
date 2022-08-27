@@ -6,11 +6,12 @@
 ### Receipt Collector
 - `cd receipt_collector`
 - optional: create and activate virtual environment
-- Run the following command 
+- Run the following command to initialize the database and populate with zones
 ```
 pip install requirements.txt
-python ./app/backend_pre_start.py
+python ./backend_pre_start.py
 alembic upgrade head
+python ./app/initial_data.py
 ```
 - Run application via `uvicorn app.main:app`
 - To add migration, run `alembic revision --autogenerate -m "description"`
@@ -27,6 +28,7 @@ alembic upgrade head
 - [ ] Use UUID's instead of int receipt id (depending on db)
 - [ ] Wrap services in docker files
 - [ ] (better) documentation (openapi)
+- [ ] carefully test datetime with timezones
 
 
 

@@ -5,18 +5,28 @@
 
 ### Receipt Collector
 - `cd receipt_collector`
-- optional: create virtual environment
-- `pip install app/requirements.txt`
-- `cp .env.example .env` and set your environment variables
+- optional: create and activate virtual environment
+- Run the following command 
+```
+pip install requirements.txt
+python ./app/backend_pre_start.py
+alembic upgrade head
+```
 - Run application via `uvicorn app.main:app`
+- To add migration, run `alembic revision --autogenerate -m "description"`
 
 ### bla
 
+- `cp .env.example .env` and set your environment variables
 
 ## TODOs
 
--[ ] Auth (API Key or Bearer Token for Taxis, Admins)
--[ ] Replace SQLite with db
+- [ ] Insert to queue, before storing in db (if load is high)
+- [ ] Auth (API Key or Bearer Token for Taxis, Admins)
+- [ ] Replace SQLite with db
+- [ ] Use UUID's instead of int receipt id (depending on db)
+- [ ] Wrap services in docker files
+- [ ] (better) documentation (openapi)
 
 
 

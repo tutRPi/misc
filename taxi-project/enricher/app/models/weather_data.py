@@ -8,7 +8,7 @@ class WeatherData(Base):
     id = Column(Integer, primary_key=True, index=True)
     latitude = Column(Float)
     longitude = Column(Float)
-    location = Column(String, unique=True, index=True)
+    location = Column(String, index=True)
     resolved_address = Column(String)
     datetime = Column(CustomDateTime)
     temperature_celsius = Column(Float)

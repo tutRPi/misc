@@ -64,8 +64,10 @@ def callback(ch, method, properties, body):
         print("Send to bigquery")
         bq.insert_row(receipt_out.dict())
 
+        # acknowledge
+        ch.basic_ack(delivery_tag=method.delivery_tag)
     except Exception as e:
         print(e)
 
 
-channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)
+channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=False)

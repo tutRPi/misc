@@ -1,0 +1,39 @@
+
+{% if request.user.is_authenticated %}
+<ul class="sidenav">
+  {% if request.path == "/" %}
+  <li><a class="active" href="{% url 'users:account' %}">User Account</a></li>
+  {% else %}
+  <li><a href="{% url 'users:account' %}">User Account</a></li>
+  {% endif %}
+
+  {% if "revenue-per-city" in request.path %}
+  <li><a class="active" href="{% url 'metrics:revenue_per_city' %}">Revenue per City</a></li>
+  {% else %}
+  <li><a href="{% url 'metrics:revenue_per_city' %}">Revenue per City</a></li>
+  {% endif %}
+
+
+  {% if "sign-out" in request.path %}
+  <li><a class="active" href="{% url 'users:sign-out' %}">Sign Out</a></li>
+  {% else %}
+  <li><a href="{% url 'users:sign-out' %}">Sign Out</a></li>
+  {% endif %}
+  
+</ul>
+{% else %}
+<ul class="sidenav">
+
+  {% if "sign-in" in request.path %}
+  <li><a class="active" href="{% url 'users:sign-in' %}">Sign In</a></li>
+  {% else %}
+  <li><a href="{% url 'users:sign-in' %}">Sign In</a></li>
+  {% endif %}
+  
+  {% if "sign-up" in request.path %}
+  <li><a class="active" href="{% url 'users:sign-up' %}">Sign Up</a></li>
+  {% else %}
+  <li><a href="{% url 'users:sign-up' %}">Sign Up</a></li>
+  {% endif %}
+</ul>
+{% endif %}

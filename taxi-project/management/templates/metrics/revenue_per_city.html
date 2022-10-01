@@ -12,27 +12,42 @@
 
 <div class="container">
 
-  <h4>Revenue per City</h4>
-<!--  <table>-->
-<!--    <thead>-->
-<!--      <tr>-->
-<!--        <th>Field</th>-->
-<!--        <th></th>-->
-<!--      </tr>-->
-<!--    </thead>-->
-<!--    <tbody>-->
-<!--      <tr>-->
-<!--        <td>Username</td>-->
-<!--          <td>{{request.user.username}}</td>-->
-<!--      </tr>-->
-<!--      <tr>-->
-<!--        <td>Name</td>-->
-<!--        <td>{{request.user.first_name|title}} {{request.user.last_name|title}}</td>      -->
-<!--      </tr>-->
+    <h4>Revenue per City</h4>
 
-<!--    </tbody>-->
-<!--  </table>-->
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Search"/>
+    </form>
 
+    {{test}}
+
+    {% if data is not None %}
+
+    <h4>From {{start_date}} to {{end_date}}</h4>
+
+    <table class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>City</th>
+            <th>Country</th>
+            <th>Total Revenue</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <!-- jinja2 Technique -->
+        {% for i in data %}
+        <tr>
+            <td>{{i.city}}</td>
+            <td>{{i.country}}</td>
+            {% load humanize %}
+            <td>{{i.revenue|floatformat:2|intcomma}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 
 
 </div>

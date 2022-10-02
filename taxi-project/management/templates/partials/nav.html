@@ -13,6 +13,12 @@
   <li><a href="{% url 'metrics:revenue_per_city' %}">Revenue per City</a></li>
   {% endif %}
 
+  {% if "trip-length" in request.path %}
+  <li><a class="active" href="{% url 'metrics:trip_length' %}">Trip Length</a></li>
+  {% else %}
+  <li><a href="{% url 'metrics:trip_length' %}">Trip Length</a></li>
+  {% endif %}
+
 
   {% if "sign-out" in request.path %}
   <li><a class="active" href="{% url 'users:sign-out' %}">Sign Out</a></li>

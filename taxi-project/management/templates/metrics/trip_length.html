@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extend_head %}
+
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+
+    <h4>Revenue per City</h4>
+
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Search"/>
+    </form>
+
+    {{test}}
+
+</div>
+
+
+{% if weekly_data is not None %}
+<div class="col-xs-12" style="height:50px;"></div>
+<div class="container">
+
+    <h4>From {{start_date}} to {{end_date}}</h4>
+
+
+    <table class="table table-dark table-striped">
+        <thead>
+        <caption>Aggregation on weekdays</caption>
+        <tr>
+            <th>City</th>
+            <th>Day of Week</th>
+            <th>Average Trip Length</th>
+            <th>Sum of Trip Length</th>
+            <th>Number of Trips</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <!-- jinja2 Technique -->
+        {% for i in weekly_data %}
+        <tr>
+            <td>{{i.city}}</td>
+            <td>
+                {% if i.weekday == 1 %} Monday
+                {% elif i.weekday == 2 %} Tuesday
+                {% elif i.weekday == 3 %} Wednesday
+                {% elif i.weekday == 4 %} Thursday
+                {% elif i.weekday == 5 %} Friday
+                {% elif i.weekday == 6 %} Saturday
+                {% elif i.weekday == 7 %} Sunday
+                {% endif %}
+            </td>
+            {% load humanize %}
+            <td>{{i.average_trip_length|floatformat:2|intcomma}}</td>
+            <td>{{i.sum_trip_length|floatformat:2|intcomma}}</td>
+            <td>{{i.number_pf_trips}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="col-xs-12" style="height:50px;"></div>
+
+    <table class="table table-dark table-striped">
+        <thead>
+        <caption>Aggregation on Weather Description</caption>
+        <tr>
+            <th>City</th>
+            <th>Weather Description</th>
+            <th>Average Trip Length</th>
+            <th>Sum of Trip Length</th>
+            <th>Number of Trips</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <!-- jinja2 Technique -->
+        {% for i in weather_data %}
+        <tr>
+            <td>{{i.city}}</td>
+            <td>{{i.weather_description}}</td>
+            {% load humanize %}
+            <td>{{i.average_trip_length|floatformat:2|intcomma}}</td>
+            <td>{{i.sum_trip_length|floatformat:2|intcomma}}</td>
+            <td>{{i.number_pf_trips}}</td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+</div>
+{% endif %}
+
+
+{% endblock %}
+
+
+{% block extend_footer %}
+
+{% endblock %}

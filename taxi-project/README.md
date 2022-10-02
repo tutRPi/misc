@@ -9,7 +9,7 @@ Goal: Build a platform for a globally operating taxi business. Taxi Receipts sho
 - RabbitMQ as a message broker, to shift the enrichment process
 - BigQuery to process more complex queries on huge datasets
 - Django app with authentication that is accessible only for admins 
-- Weather data from visualcrossing.com (caching for location+date+time to save api calls)
+- Weather data from visualcrossing.com (caching for location+date+time to reduce api calls)
 
 
 ## Setup
@@ -44,9 +44,10 @@ python ./app/initial_data.py
 - Run application via `python main.py`
 
 
-### Management
+### Management (Statistics)
 - `cd management`
 - optional: create and activate virtual environment
+- set `GOOGLE_APPLICATION_CREDENTIALS` (filepath), `RECAPTCHA_PUBLIC_KEY` and `RECAPTCHA_PRIVATE_KEY` in `management/settings.py`
 ```
 pip install requirements.txt
 ```
